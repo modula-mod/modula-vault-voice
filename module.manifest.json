@@ -1,0 +1,400 @@
+{
+  "manifestVersion": 2,
+  "moduleId": "digital.modula.vault-notes.voice",
+  "name": "Vault Voice",
+  "description": "Offline-capable audio and transcription add-on for Vault Notes.",
+  "version": "0.1.0",
+  "standardVersion": "2.1.0",
+  "sectionVersions": {
+    "identity": "2.1.0",
+    "lifecycle": "2.1.0",
+    "backend": "2.1.0",
+    "engines": "2.1.0",
+    "ai": "2.1.0",
+    "permissions": "2.1.0",
+    "settings": "2.1.0",
+    "routes": "2.1.0",
+    "views": "2.1.0",
+    "records": "2.1.0",
+    "actions": "2.1.0",
+    "functions": "2.1.0",
+    "jobs": "2.1.0",
+    "events": "2.1.0",
+    "notifications": "2.1.0",
+    "search": "2.1.0",
+    "exports": "2.1.0",
+    "imports": "2.1.0",
+    "synchronization": "2.1.0",
+    "dependencies": "2.1.0",
+    "optionalDependencies": "2.1.0",
+    "integrations": "2.1.0",
+    "billing": "2.1.0",
+    "telemetry": "2.1.0",
+    "diagnostics": "2.1.0",
+    "accessibility": "2.1.0",
+    "localization": "2.1.0",
+    "appearance": "2.1.0",
+    "onboarding": "2.1.0",
+    "migrations": "2.1.0",
+    "capabilities": "2.1.0",
+    "services": "2.1.0",
+    "apis": "2.1.0",
+    "hooks": "2.1.0",
+    "metrics": "2.1.0",
+    "storage": "2.1.0",
+    "widgets": "2.1.0",
+    "navigation": "2.1.0",
+    "ui": "2.1.0",
+    "automation": "2.1.0",
+    "offline": "2.1.0",
+    "realtime": "2.1.0",
+    "versioning": "2.1.0",
+    "compatibilityMatrix": "2.1.0",
+    "marketplace": "2.1.0"
+  },
+  "publisher": {
+    "publisherId": "modula",
+    "displayName": "Modula",
+    "website": "https://modula.digital"
+  },
+  "source": {
+    "provider": "github",
+    "repository": "modula-mod/modula-vault-voice",
+    "commit": "0000000000000000000000000000000000000000",
+    "manifestPath": "module.manifest.json",
+    "releaseTag": "vault-voice-v0.1.0",
+    "releaseAssetName": "modula-vault-voice-0.1.0.tgz"
+  },
+  "license": {
+    "status": "firstParty",
+    "evidenceIds": [
+      "LICENSE",
+      "README.md",
+      "SECURITY.md"
+    ]
+  },
+  "trust": {
+    "requestedLevel": "firstParty"
+  },
+  "compatibility": {
+    "minimumGreenfieldVersion": "0.1.0",
+    "minimumModulaHostVersion": "0.1.0",
+    "protocolVersions": [
+      "greenfield.v1"
+    ],
+    "platforms": [
+      "ios",
+      "android",
+      "web",
+      "server"
+    ],
+    "nativeCapabilities": [
+      "microphone",
+      "audio-playback"
+    ]
+  },
+  "permissions": [
+    {
+      "permission": "notes.attachments.read",
+      "reason": "Read only the recording selected for playback or transcription.",
+      "risk": "low"
+    },
+    {
+      "permission": "notes.attachments.create",
+      "reason": "Attach a user-created recording to the selected note.",
+      "risk": "medium"
+    },
+    {
+      "permission": "notes.update",
+      "reason": "Insert a user-approved transcript into the selected note.",
+      "risk": "medium"
+    },
+    {
+      "permission": "notes.editor.contribute",
+      "reason": "Register declared recording and transcript commands.",
+      "risk": "low"
+    },
+    {
+      "permission": "notes.actions.contribute",
+      "reason": "Register declared note actions.",
+      "risk": "low"
+    },
+    {
+      "permission": "media.audio.capture",
+      "reason": "Capture audio only after an explicit user action.",
+      "risk": "high"
+    },
+    {
+      "permission": "media.audio.playback",
+      "reason": "Play a selected Vault Voice recording.",
+      "risk": "low"
+    },
+    {
+      "permission": "transcription.request",
+      "reason": "Submit an explicitly selected recording to an approved provider.",
+      "risk": "high"
+    }
+  ],
+  "dependencies": [
+    {
+      "moduleId": "digital.modula.vault-notes",
+      "versionRange": ">=1.2.0 <2.0.0",
+      "optional": false,
+      "reason": "Vault Voice extends Vault Notes."
+    }
+  ],
+  "contributions": {
+    "functions": [
+      {
+        "id": "digital.modula.vault-notes.voice.function.record.registration",
+        "title": "Record audio",
+        "functionId": "digital.modula.vault-notes.voice.function.record",
+        "mode": "hostNative",
+        "inputSchemaRef": "schemas/vault-voice-request.schema.json",
+        "outputSchemaRef": "schemas/vault-voice-result.schema.json",
+        "executionRequired": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.function.play.registration",
+        "title": "Play recording",
+        "functionId": "digital.modula.vault-notes.voice.function.play",
+        "mode": "hostNative",
+        "inputSchemaRef": "schemas/vault-voice-request.schema.json",
+        "outputSchemaRef": "schemas/vault-voice-result.schema.json",
+        "executionRequired": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.function.transcribe.registration",
+        "title": "Transcribe recording",
+        "functionId": "digital.modula.vault-notes.voice.function.transcribe",
+        "mode": "remoteHttp",
+        "inputSchemaRef": "schemas/vault-voice-request.schema.json",
+        "outputSchemaRef": "schemas/vault-voice-result.schema.json",
+        "executionRequired": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.function.insert-transcript.registration",
+        "title": "Insert transcript into note",
+        "functionId": "digital.modula.vault-notes.voice.function.insert-transcript",
+        "mode": "remoteHttp",
+        "inputSchemaRef": "schemas/vault-voice-request.schema.json",
+        "outputSchemaRef": "schemas/vault-voice-result.schema.json",
+        "executionRequired": true
+      }
+    ],
+    "tools": [
+      {
+        "id": "digital.modula.vault-notes.voice.tool.record",
+        "title": "Record Voice Note",
+        "toolId": "digital.modula.vault-notes.voice.tool.record",
+        "functionId": "digital.modula.vault-notes.voice.function.record",
+        "surfaces": [
+          "composer-tools",
+          "vault-notes"
+        ]
+      }
+    ],
+    "jobs": [
+      {
+        "id": "digital.modula.vault-notes.voice.job.transcription",
+        "title": "Vault Voice transcription",
+        "jobType": "vault-voice.transcription.v1",
+        "mode": "backgroundJob"
+      }
+    ]
+  },
+  "backend": {
+    "mode": "module-managed",
+    "protocolVersion": "1.0.0",
+    "endpoints": {
+      "baseUrlStrategy": "registry",
+      "apiVersion": "1.0.0",
+      "discoveryPath": "/.well-known/modula-module.json",
+      "healthPath": "/v1/health",
+      "capabilitiesPath": "/v1/capabilities",
+      "actionsPath": "/v1/actions",
+      "allowedHosts": [
+        "vault-voice.modula.digital"
+      ]
+    },
+    "authentication": {
+      "strategy": "greenfield-signed-jwt",
+      "tokenExchangeRequired": true,
+      "audience": "modula-vault-voice",
+      "tokenTtlSeconds": 120,
+      "sessionExchangePath": "/v1/session/exchange"
+    },
+    "trust": {
+      "publisherId": "modula",
+      "allowedOrigins": [
+        "https://vault-voice.modula.digital"
+      ]
+    },
+    "data": {
+      "primaryStore": "module-backend",
+      "categories": [
+        {
+          "id": "vault-voice-recordings",
+          "description": "Extension-owned recording metadata, transcription jobs, and transcripts.",
+          "location": "module-backend",
+          "classification": "restricted",
+          "exportable": true,
+          "deletable": true
+        }
+      ],
+      "exportSupported": true,
+      "deletionSupported": true,
+      "backupResponsibility": "publisher"
+    },
+    "deployment": {
+      "ownership": "modula-hosted",
+      "multiTenant": true,
+      "selfHostingSupported": false
+    },
+    "actions": [
+      {
+        "actionId": "digital.modula.vault-notes.voice.function.transcribe",
+        "title": "transcribe",
+        "method": "POST",
+        "path": "/v1/actions/transcribe",
+        "inputSchema": "schemas/transcription-request.schema.json",
+        "outputSchema": "schemas/transcription-result.schema.json",
+        "permissions": [
+          "notes.attachments.read",
+          "transcription.request"
+        ],
+        "idempotent": true,
+        "timeoutMs": 30000,
+        "sideEffects": "internal-write",
+        "confirmation": "user"
+      }
+    ]
+  },
+  "integrity": {
+    "manifestSha256": "1d8c62b25ca09a92bd4bbe2955051f31d5a9fe38e96329cc21bd27a12a14c5ae",
+    "releaseSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "extensionProduct": {
+    "version": "0.1.0",
+    "kind": "addon",
+    "targets": [
+      {
+        "productId": "digital.modula.vault-notes",
+        "versionRange": ">=1.2.0 <2.0.0",
+        "requiredCapabilities": [
+          "notes.attachments.read",
+          "notes.attachments.create",
+          "notes.update",
+          "notes.editor.contribute"
+        ],
+        "requiredExtensionPoints": [
+          "digital.modula.vault-notes.editor.attachment",
+          "digital.modula.vault-notes.note.actions",
+          "digital.modula.vault-notes.composer.tool"
+        ]
+      }
+    ],
+    "extensionPoints": [],
+    "contributions": [
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.record",
+        "title": "Record audio",
+        "kind": "editor.attachment",
+        "extensionPoint": "digital.modula.vault-notes.editor.attachment",
+        "functionId": "digital.modula.vault-notes.voice.function.record",
+        "requiredCapability": "media.audio.capture",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.play",
+        "title": "Play recording",
+        "kind": "menu.item",
+        "extensionPoint": "digital.modula.vault-notes.note.actions",
+        "functionId": "digital.modula.vault-notes.voice.function.play",
+        "requiredCapability": "media.audio.playback",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.transcribe",
+        "title": "Transcribe",
+        "kind": "background.action",
+        "extensionPoint": "digital.modula.vault-notes.note.after-save",
+        "functionId": "digital.modula.vault-notes.voice.function.transcribe",
+        "requiredCapability": "transcription.request",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": true,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.insert-transcript",
+        "title": "Insert transcript",
+        "kind": "editor.command",
+        "extensionPoint": "digital.modula.vault-notes.editor.command",
+        "functionId": "digital.modula.vault-notes.voice.function.insert-transcript",
+        "requiredCapability": "notes.update",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.composer-record",
+        "title": "Record Voice Note",
+        "kind": "composer.tool",
+        "extensionPoint": "digital.modula.vault-notes.composer.tool",
+        "functionId": "digital.modula.vault-notes.voice.function.record",
+        "requiredCapability": "media.audio.capture",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      }
+    ],
+    "retention": {
+      "defaultMode": "KEEP_DATA",
+      "supportsUserChoice": true,
+      "metadataNamespace": "digital.modula.vault-notes.voice"
+    },
+    "graphPolicy": {
+      "maxDepth": 8,
+      "maxNodes": 128
+    }
+  }
+}

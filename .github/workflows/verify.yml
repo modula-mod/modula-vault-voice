@@ -1,0 +1,21 @@
+name: verify
+on: [push, pull_request]
+jobs:
+  vault-voice:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: modula-vault-voice}
+      - uses: actions/checkout@v4
+        with:
+          repository: modula-mod/modula-module-standard
+          ref: mms-v2.1.0
+          path: modula-module-standard
+      - uses: pnpm/action-setup@v4
+        with: {version: 11.11.0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: pnpm, cache-dependency-path: modula-vault-voice/pnpm-lock.yaml}
+      - run: pnpm install --frozen-lockfile
+        working-directory: modula-vault-voice
+      - run: pnpm verify
+        working-directory: modula-vault-voice

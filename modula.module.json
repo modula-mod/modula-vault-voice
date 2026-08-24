@@ -1,0 +1,1461 @@
+{
+  "schemaVersion": "2.1.0",
+  "standardVersion": "2.1.0",
+  "moduleVersion": "0.1.0",
+  "manifestSchemaVersion": "2.1.0",
+  "dataSchemaVersion": "1.0.0",
+  "id": "digital.modula.vault-notes.voice",
+  "slug": "vault-voice",
+  "name": "Vault Voice",
+  "description": "Offline-capable audio recording and governed transcription add-on for Vault Notes.",
+  "publisher": {
+    "id": "modula",
+    "name": "Modula",
+    "website": "https://modula.digital",
+    "supportUrl": "https://modula.digital/support"
+  },
+  "compatibility": {
+    "host": "^1.0.0",
+    "runtime": "^1.0.0",
+    "standard": "^2.1.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web",
+      "server"
+    ]
+  },
+  "lifecycle": {
+    "executionMode": "declarative",
+    "defaultState": "installed",
+    "allowedTransitions": [
+      {
+        "from": "discovered",
+        "to": "installed",
+        "auditEvent": "module.installed"
+      },
+      {
+        "from": "installed",
+        "to": "enabled",
+        "requiresConfirmation": true,
+        "auditEvent": "module.enabled"
+      },
+      {
+        "from": "enabled",
+        "to": "disabled",
+        "auditEvent": "module.disabled"
+      },
+      {
+        "from": "disabled",
+        "to": "enabled",
+        "requiresConfirmation": true,
+        "auditEvent": "module.enabled"
+      },
+      {
+        "from": "enabled",
+        "to": "updating",
+        "auditEvent": "module.update-started"
+      },
+      {
+        "from": "updating",
+        "to": "enabled",
+        "auditEvent": "module.updated"
+      },
+      {
+        "from": "updating",
+        "to": "failed",
+        "auditEvent": "module.update-failed"
+      },
+      {
+        "from": "enabled",
+        "to": "quarantined",
+        "auditEvent": "module.quarantined"
+      },
+      {
+        "from": "failed",
+        "to": "disabled",
+        "auditEvent": "module.disabled"
+      },
+      {
+        "from": "disabled",
+        "to": "uninstalled",
+        "requiresConfirmation": true,
+        "auditEvent": "module.uninstalled"
+      }
+    ],
+    "uninstall": {
+      "dataPolicy": "retain",
+      "requiresConfirmation": true
+    }
+  },
+  "permissions": [
+    {
+      "id": "notes.attachments.read",
+      "reason": "Read only the recording selected for playback or transcription.",
+      "risk": "low",
+      "required": true,
+      "policyMode": "observe"
+    },
+    {
+      "id": "notes.attachments.create",
+      "reason": "Attach a user-created recording to the selected note.",
+      "risk": "medium",
+      "required": true,
+      "policyMode": "observe"
+    },
+    {
+      "id": "notes.update",
+      "reason": "Insert a user-approved transcript into the selected note.",
+      "risk": "medium",
+      "required": true,
+      "policyMode": "observe"
+    },
+    {
+      "id": "notes.editor.contribute",
+      "reason": "Register declared recording and transcript commands.",
+      "risk": "low",
+      "required": true,
+      "policyMode": "observe"
+    },
+    {
+      "id": "notes.actions.contribute",
+      "reason": "Register declared note actions.",
+      "risk": "low",
+      "required": true,
+      "policyMode": "observe"
+    },
+    {
+      "id": "media.audio.capture",
+      "reason": "Capture audio only after an explicit user action.",
+      "risk": "high",
+      "required": true,
+      "policyMode": "require-confirmation"
+    },
+    {
+      "id": "media.audio.playback",
+      "reason": "Play a selected Vault Voice recording.",
+      "risk": "low",
+      "required": true,
+      "policyMode": "observe"
+    },
+    {
+      "id": "transcription.request",
+      "reason": "Submit an explicitly selected recording to an approved provider.",
+      "risk": "high",
+      "required": true,
+      "policyMode": "require-confirmation"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "files",
+      "required": true,
+      "reason": "Capture, attach, and play user-controlled audio through host platform adapters."
+    },
+    {
+      "id": "offline",
+      "required": true,
+      "reason": "Save recordings locally before optional transcription."
+    },
+    {
+      "id": "functions",
+      "required": true,
+      "reason": "Expose declared Vault Voice actions."
+    },
+    {
+      "id": "services",
+      "required": true,
+      "reason": "Invoke a configured transcription provider through Greenfield."
+    },
+    {
+      "id": "ui-contributions",
+      "required": true,
+      "reason": "Publish declarative recording and attachment actions."
+    },
+    {
+      "id": "jobs",
+      "required": true,
+      "reason": "Run bounded transcription jobs."
+    }
+  ],
+  "records": [],
+  "views": [],
+  "actions": [],
+  "functions": [
+    {
+      "id": "digital.modula.vault-notes.voice.function.record",
+      "title": "Record audio",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "noteId"
+        ],
+        "properties": {
+          "noteId": {
+            "type": "string"
+          },
+          "recordingId": {
+            "type": "string"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "recordingId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "permissions": [
+        "media.audio.capture",
+        "notes.attachments.create"
+      ],
+      "aiCallable": false,
+      "automationCallable": false,
+      "idempotent": false,
+      "sideEffects": [
+        "record-write-after-confirmation"
+      ],
+      "timeoutMs": 15000,
+      "rateLimit": {
+        "windowSeconds": 60,
+        "maxCalls": 20
+      },
+      "audit": {
+        "event": "extension.action.invoked",
+        "includeInput": false,
+        "includeOutput": false
+      },
+      "confirmationPolicy": {
+        "required": true,
+        "risk": "medium"
+      }
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.function.play",
+      "title": "Play recording",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "noteId"
+        ],
+        "properties": {
+          "noteId": {
+            "type": "string"
+          },
+          "recordingId": {
+            "type": "string"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "recordingId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "permissions": [
+        "notes.attachments.read",
+        "media.audio.playback"
+      ],
+      "aiCallable": false,
+      "automationCallable": false,
+      "idempotent": true,
+      "sideEffects": [],
+      "timeoutMs": 15000,
+      "rateLimit": {
+        "windowSeconds": 60,
+        "maxCalls": 20
+      },
+      "audit": {
+        "event": "extension.action.invoked",
+        "includeInput": false,
+        "includeOutput": false
+      },
+      "confirmationPolicy": {
+        "required": false,
+        "risk": "low"
+      }
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.function.transcribe",
+      "title": "Transcribe recording",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "noteId"
+        ],
+        "properties": {
+          "noteId": {
+            "type": "string"
+          },
+          "recordingId": {
+            "type": "string"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "recordingId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "permissions": [
+        "notes.attachments.read",
+        "transcription.request"
+      ],
+      "aiCallable": false,
+      "automationCallable": false,
+      "idempotent": true,
+      "sideEffects": [],
+      "timeoutMs": 30000,
+      "rateLimit": {
+        "windowSeconds": 60,
+        "maxCalls": 20
+      },
+      "audit": {
+        "event": "extension.action.invoked",
+        "includeInput": false,
+        "includeOutput": false
+      },
+      "confirmationPolicy": {
+        "required": false,
+        "risk": "low"
+      }
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.function.insert-transcript",
+      "title": "Insert transcript into note",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "noteId"
+        ],
+        "properties": {
+          "noteId": {
+            "type": "string"
+          },
+          "recordingId": {
+            "type": "string"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "recordingId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "permissions": [
+        "notes.update"
+      ],
+      "aiCallable": false,
+      "automationCallable": false,
+      "idempotent": true,
+      "sideEffects": [
+        "record-write-after-confirmation"
+      ],
+      "timeoutMs": 15000,
+      "rateLimit": {
+        "windowSeconds": 60,
+        "maxCalls": 20
+      },
+      "audit": {
+        "event": "extension.action.invoked",
+        "includeInput": false,
+        "includeOutput": false
+      },
+      "confirmationPolicy": {
+        "required": true,
+        "risk": "medium"
+      }
+    }
+  ],
+  "settings": [],
+  "events": [],
+  "automations": [],
+  "search": [],
+  "ai": [],
+  "diagnostics": {
+    "components": [
+      "startup",
+      "runtime",
+      "permissions",
+      "dependencies",
+      "search",
+      "ai",
+      "connector",
+      "health"
+    ],
+    "warnings": [],
+    "errors": [],
+    "startup": {
+      "checks": [
+        "manifest"
+      ]
+    },
+    "runtime": {
+      "executionMode": "declarative"
+    },
+    "permissions": {
+      "required": [
+        "records:vault-notes:read",
+        "records:vault-notes:write"
+      ]
+    },
+    "dependencies": {
+      "external": []
+    },
+    "search": {
+      "definitions": [
+        "digital.modula.vault-notes.voice.search.notes"
+      ]
+    },
+    "ai": {
+      "gatewayOnly": true
+    },
+    "connector": {
+      "required": false
+    },
+    "health": {
+      "status": "healthy"
+    }
+  },
+  "health": {
+    "status": "healthy",
+    "components": [
+      {
+        "id": "manifest",
+        "status": "healthy"
+      },
+      {
+        "id": "records",
+        "status": "healthy"
+      },
+      {
+        "id": "search",
+        "status": "degraded",
+        "message": "Optional until host search capability is granted."
+      },
+      {
+        "id": "ai",
+        "status": "degraded",
+        "message": "Optional until host AI capability is granted."
+      },
+      {
+        "id": "api-registry",
+        "status": "healthy"
+      },
+      {
+        "id": "service-registry",
+        "status": "healthy"
+      }
+    ],
+    "checkDefinitions": [
+      {
+        "id": "manifest-validate",
+        "component": "startup",
+        "timeoutMs": 1000,
+        "required": true
+      },
+      {
+        "id": "records-contract",
+        "component": "runtime",
+        "timeoutMs": 1000,
+        "required": true
+      },
+      {
+        "id": "search-projection",
+        "component": "search",
+        "timeoutMs": 1000,
+        "required": false
+      },
+      {
+        "id": "ai-gateway-contract",
+        "component": "ai",
+        "timeoutMs": 1000,
+        "required": false
+      }
+    ]
+  },
+  "migrations": {
+    "dataSchemaVersion": "1.0.0",
+    "steps": []
+  },
+  "release": {
+    "repository": "modula-mod/modula-vault-voice",
+    "commitSha": "0000000000000000000000000000000000000000",
+    "checksum": "0000000000000000000000000000000000000000000000000000000000000000",
+    "licenseEvidence": [
+      "LICENSE",
+      "README.md",
+      "SECURITY.md"
+    ],
+    "signing": {
+      "signed": false
+    },
+    "channel": "stable",
+    "reviewStatus": "approved",
+    "securityAdvisories": []
+  },
+  "trust": {
+    "publisher": {
+      "id": "modula",
+      "name": "Modula",
+      "website": "https://modula.digital"
+    },
+    "level": "first-party",
+    "provenance": {
+      "sourceVerified": true,
+      "checksumVerified": true,
+      "signatureVerified": false
+    },
+    "review": {
+      "status": "approved",
+      "evidence": [
+        "first-party-source-review"
+      ]
+    },
+    "security": {
+      "advisories": []
+    }
+  },
+  "sectionVersions": {
+    "identity": "2.1.0",
+    "lifecycle": "2.1.0",
+    "backend": "2.1.0",
+    "engines": "2.1.0",
+    "ai": "2.1.0",
+    "permissions": "2.1.0",
+    "settings": "2.1.0",
+    "routes": "2.1.0",
+    "views": "2.1.0",
+    "records": "2.1.0",
+    "actions": "2.1.0",
+    "functions": "2.1.0",
+    "jobs": "2.1.0",
+    "events": "2.1.0",
+    "notifications": "2.1.0",
+    "search": "2.1.0",
+    "exports": "2.1.0",
+    "imports": "2.1.0",
+    "synchronization": "2.1.0",
+    "dependencies": "2.1.0",
+    "optionalDependencies": "2.1.0",
+    "integrations": "2.1.0",
+    "billing": "2.1.0",
+    "telemetry": "2.1.0",
+    "diagnostics": "2.1.0",
+    "accessibility": "2.1.0",
+    "localization": "2.1.0",
+    "appearance": "2.1.0",
+    "onboarding": "2.1.0",
+    "migrations": "2.1.0",
+    "capabilities": "2.1.0",
+    "services": "2.1.0",
+    "apis": "2.1.0",
+    "hooks": "2.1.0",
+    "metrics": "2.1.0",
+    "storage": "2.1.0",
+    "widgets": "2.1.0",
+    "navigation": "2.1.0",
+    "ui": "2.1.0",
+    "automation": "2.1.0",
+    "offline": "2.1.0",
+    "realtime": "2.1.0",
+    "versioning": "2.1.0",
+    "compatibilityMatrix": "2.1.0",
+    "marketplace": "2.1.0"
+  },
+  "identity": {
+    "version": "2.1.0",
+    "metadata": {
+      "moduleId": "digital.modula.vault-notes.voice",
+      "publisherId": "modula"
+    }
+  },
+  "dependencyGraph": {
+    "version": "2.1.0",
+    "requires": [
+      {
+        "moduleId": "digital.modula.vault-notes",
+        "versionRange": ">=1.2.0 <2.0.0",
+        "reason": "Vault Voice extends Vault Notes through public contracts.",
+        "capabilityIds": [
+          "notes.attachments.create",
+          "notes.update"
+        ]
+      }
+    ],
+    "optional": [],
+    "recommended": [],
+    "conflicts": [],
+    "replaces": [],
+    "provides": [
+      {
+        "id": "digital.modula.vault-notes.voice.capture",
+        "title": "Vault Voice media capture",
+        "version": "0.1.0",
+        "kind": "service"
+      }
+    ]
+  },
+  "serviceRegistry": {
+    "version": "2.1.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.service",
+        "title": "Vault Voice transcription service",
+        "kind": "custom",
+        "version": "0.1.0",
+        "contract": "digital.modula.vault-notes.voice.service.v1",
+        "permissions": [
+          "notes.attachments.read",
+          "transcription.request"
+        ],
+        "capabilities": [
+          "vault.voice.transcribe"
+        ],
+        "inputSchemaRef": "schemas/transcription-request.schema.json",
+        "outputSchemaRef": "schemas/transcription-result.schema.json",
+        "timeoutMs": 30000,
+        "rateLimitPerMinute": 20,
+        "invocationDepthLimit": 2
+      }
+    ]
+  },
+  "apiRegistry": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.api.create-note",
+        "title": "Create Note",
+        "version": "1.0.0",
+        "method": "POST",
+        "path": "/api/modula/digital.modula.vault-notes.voice/notes",
+        "inputSchema": "schemas/note.schema.json",
+        "outputSchema": "schemas/note.schema.json",
+        "permissions": [
+          "records:vault-notes:write"
+        ],
+        "sideEffects": "write",
+        "idempotent": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.api.update-note",
+        "title": "Update Note",
+        "version": "1.0.0",
+        "method": "PATCH",
+        "path": "/api/modula/digital.modula.vault-notes.voice/notes/{noteId}",
+        "inputSchema": "schemas/note.schema.json",
+        "outputSchema": "schemas/note.schema.json",
+        "permissions": [
+          "records:vault-notes:write"
+        ],
+        "sideEffects": "write",
+        "idempotent": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.api.archive-note",
+        "title": "Archive Note",
+        "version": "1.0.0",
+        "method": "POST",
+        "path": "/api/modula/digital.modula.vault-notes.voice/notes/{noteId}/archive",
+        "outputSchema": "schemas/note.schema.json",
+        "permissions": [
+          "records:vault-notes:write"
+        ],
+        "sideEffects": "write",
+        "idempotent": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.api.export-note",
+        "title": "Export Note",
+        "version": "1.0.0",
+        "method": "POST",
+        "path": "/api/modula/digital.modula.vault-notes.voice/exports",
+        "outputSchema": "schemas/export.schema.json",
+        "permissions": [
+          "records:vault-notes:read"
+        ],
+        "sideEffects": "read",
+        "idempotent": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.api.search",
+        "title": "Search Notes",
+        "version": "1.0.0",
+        "method": "GET",
+        "path": "/api/modula/digital.modula.vault-notes.voice/search",
+        "outputSchema": "schemas/search.schema.json",
+        "permissions": [
+          "records:vault-notes:read"
+        ],
+        "sideEffects": "read",
+        "idempotent": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.api.history",
+        "title": "Note History",
+        "version": "1.0.0",
+        "method": "GET",
+        "path": "/api/modula/digital.modula.vault-notes.voice/notes/{noteId}/history",
+        "outputSchema": "schemas/history.schema.json",
+        "permissions": [
+          "records:vault-notes:read"
+        ],
+        "sideEffects": "read",
+        "idempotent": true
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.api.attachments",
+        "title": "Attachments",
+        "version": "1.0.0",
+        "method": "POST",
+        "path": "/api/modula/digital.modula.vault-notes.voice/notes/{noteId}/attachments",
+        "outputSchema": "schemas/attachment.schema.json",
+        "permissions": [
+          "records:vault-notes:write"
+        ],
+        "sideEffects": "write",
+        "idempotent": true
+      }
+    ]
+  },
+  "eventBus": {
+    "version": "2.1.0",
+    "items": []
+  },
+  "hookRegistry": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-create-record",
+        "hook": "BeforeCreateRecord",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.after-create-record",
+        "hook": "AfterCreateRecord",
+        "phase": "after",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-delete",
+        "hook": "BeforeDelete",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-export",
+        "hook": "BeforeExport",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.after-export",
+        "hook": "AfterExport",
+        "phase": "after",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-install",
+        "hook": "BeforeInstall",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.after-install",
+        "hook": "AfterInstall",
+        "phase": "after",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-enable",
+        "hook": "BeforeEnable",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.after-enable",
+        "hook": "AfterEnable",
+        "phase": "after",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-disable",
+        "hook": "BeforeDisable",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.after-disable",
+        "hook": "AfterDisable",
+        "phase": "after",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.before-uninstall",
+        "hook": "BeforeUninstall",
+        "phase": "before",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.hook.after-uninstall",
+        "hook": "AfterUninstall",
+        "phase": "after",
+        "target": "digital.modula.vault-notes.voice",
+        "policyMode": "observe"
+      }
+    ]
+  },
+  "capabilityDiscovery": {
+    "version": "2.1.0",
+    "supportsBackend": true,
+    "supportsWidgets": false
+  },
+  "healthModel": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.health.overall",
+        "status": "healthy"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.health.search",
+        "status": "search-rebuilding"
+      }
+    ]
+  },
+  "diagnosticsModel": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.logs",
+        "title": "logs"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.statistics",
+        "title": "statistics"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.performance",
+        "title": "performance"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.storage",
+        "title": "storage"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.database",
+        "title": "database"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.cache",
+        "title": "cache"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.queues",
+        "title": "queues"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.ai",
+        "title": "ai"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.search",
+        "title": "search"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.exports",
+        "title": "exports"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.imports",
+        "title": "imports"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.jobs",
+        "title": "jobs"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.backend",
+        "title": "backend"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.network",
+        "title": "network"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.permissions",
+        "title": "permissions"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.diagnostics.health",
+        "title": "health"
+      }
+    ]
+  },
+  "metrics": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.metric.install-count",
+        "title": "install-count",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.open-count",
+        "title": "open-count",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.usage",
+        "title": "usage",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.storage",
+        "title": "storage",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.searches",
+        "title": "searches",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.exports",
+        "title": "exports",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.ai-calls",
+        "title": "ai-calls",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.errors",
+        "title": "errors",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.latency",
+        "title": "latency",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.average-execution",
+        "title": "average-execution",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.memory",
+        "title": "memory",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.cpu",
+        "title": "cpu",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.bandwidth",
+        "title": "bandwidth",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.background-jobs",
+        "title": "background-jobs",
+        "version": "1.0.0"
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.metric.sync",
+        "title": "sync",
+        "version": "1.0.0"
+      }
+    ]
+  },
+  "permissionModel": {
+    "version": "2.1.0",
+    "categories": {
+      "data": [
+        {
+          "id": "notes.attachments.read",
+          "reason": "Read only the recording selected for playback or transcription.",
+          "risk": "low",
+          "required": true,
+          "policyMode": "observe"
+        },
+        {
+          "id": "notes.attachments.create",
+          "reason": "Attach a user-created recording to the selected note.",
+          "risk": "medium",
+          "required": true,
+          "policyMode": "observe"
+        },
+        {
+          "id": "notes.update",
+          "reason": "Insert a user-approved transcript into the selected note.",
+          "risk": "medium",
+          "required": true,
+          "policyMode": "observe"
+        },
+        {
+          "id": "notes.editor.contribute",
+          "reason": "Register declared recording and transcript commands.",
+          "risk": "low",
+          "required": true,
+          "policyMode": "observe"
+        },
+        {
+          "id": "notes.actions.contribute",
+          "reason": "Register declared note actions.",
+          "risk": "low",
+          "required": true,
+          "policyMode": "observe"
+        }
+      ],
+      "media": [
+        {
+          "id": "media.audio.capture",
+          "reason": "Capture audio only after an explicit user action.",
+          "risk": "high",
+          "required": true,
+          "policyMode": "require-confirmation"
+        },
+        {
+          "id": "media.audio.playback",
+          "reason": "Play a selected Vault Voice recording.",
+          "risk": "low",
+          "required": true,
+          "policyMode": "observe"
+        }
+      ]
+    }
+  },
+  "jobRegistry": {
+    "version": "2.1.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.job.transcription",
+        "title": "Vault Voice transcription",
+        "kind": "queue",
+        "functionId": "digital.modula.vault-notes.voice.function.transcribe",
+        "retryPolicy": {
+          "maximumAttempts": 3,
+          "backoff": "exponential"
+        },
+        "pausedByDefault": false
+      }
+    ]
+  },
+  "storageModel": {
+    "version": "2.1.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.storage.recordings",
+        "title": "Vault Voice recordings and transcripts",
+        "version": "1.0.0",
+        "kind": "blob-storage",
+        "scope": "account",
+        "quotaBytes": 100000000,
+        "retention": "extension-owned",
+        "encrypted": true,
+        "exportSupported": true,
+        "deletionSupported": true
+      }
+    ]
+  },
+  "widgetRegistry": {
+    "version": "2.1.0",
+    "items": []
+  },
+  "navigationRegistry": {
+    "version": "2.1.0",
+    "items": []
+  },
+  "uiContributions": {
+    "version": "2.1.0",
+    "items": []
+  },
+  "automationRegistry": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.automation.selection-to-note",
+        "title": "Selection to note",
+        "triggers": [
+          "user.selectedText"
+        ],
+        "actions": [
+          "digital.modula.vault-notes.voice.action.create-note"
+        ],
+        "conditions": []
+      }
+    ]
+  },
+  "offline": {
+    "version": "2.0.0",
+    "capable": true,
+    "syncStrategy": "background",
+    "conflictStrategy": "manual-review",
+    "compression": true,
+    "encryption": true
+  },
+  "realtime": {
+    "version": "2.0.0",
+    "events": [
+      "note.created",
+      "note.updated",
+      "note.deleted",
+      "note.archived"
+    ],
+    "presence": false,
+    "typing": false,
+    "watchers": true,
+    "subscriptions": [
+      "digital.modula.vault-notes.voice.records.note"
+    ],
+    "channels": [
+      "module:digital.modula.vault-notes.voice"
+    ]
+  },
+  "versioning": {
+    "version": "2.1.0",
+    "moduleVersion": "0.1.0",
+    "standardVersion": "2.1.0",
+    "manifestVersion": "2.1.0"
+  },
+  "compatibilityMatrix": {
+    "version": "2.1.0",
+    "moduleStandardVersion": "^2.1.0",
+    "runtimeVersion": "^1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web",
+      "server"
+    ]
+  },
+  "marketplace": {
+    "version": "2.1.0",
+    "publisherVerification": "first-party",
+    "publisherProfile": "https://modula.digital",
+    "verifiedBadge": true,
+    "license": "LicenseRef-Modula-First-Party",
+    "source": "github",
+    "repository": "modula-mod/modula-vault-voice",
+    "ciStatus": "passing",
+    "securityScore": 100,
+    "downloads": 0,
+    "changelog": "CHANGELOG.md",
+    "roadmap": "README.md",
+    "support": "https://modula.digital/support",
+    "documentation": "README.md",
+    "issueTracker": "https://github.com/modula-mod/modula-module-vault-notes/issues",
+    "pricing": "included",
+    "requiredRuntimes": [
+      "greenfield"
+    ],
+    "aiSupport": false,
+    "backendMode": "module-managed"
+  },
+  "engineReadiness": {
+    "version": "2.1.0",
+    "engines": [
+      "declarative-ui",
+      "functions",
+      "media"
+    ]
+  },
+  "exports": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.export.markdown",
+        "title": "Markdown export"
+      }
+    ]
+  },
+  "imports": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.import.markdown",
+        "title": "Markdown import"
+      }
+    ]
+  },
+  "synchronization": {
+    "version": "2.0.0",
+    "items": [
+      {
+        "id": "digital.modula.vault-notes.voice.sync.notes",
+        "title": "Notes sync"
+      }
+    ]
+  },
+  "integrations": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "billing": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "telemetry": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "accessibility": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "localization": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "appearance": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "onboarding": {
+    "version": "2.0.0",
+    "items": []
+  },
+  "extensionProduct": {
+    "version": "0.1.0",
+    "kind": "addon",
+    "targets": [
+      {
+        "productId": "digital.modula.vault-notes",
+        "versionRange": ">=1.2.0 <2.0.0",
+        "requiredCapabilities": [
+          "notes.attachments.read",
+          "notes.attachments.create",
+          "notes.update",
+          "notes.editor.contribute"
+        ],
+        "requiredExtensionPoints": [
+          "digital.modula.vault-notes.editor.attachment",
+          "digital.modula.vault-notes.note.actions",
+          "digital.modula.vault-notes.composer.tool"
+        ]
+      }
+    ],
+    "extensionPoints": [],
+    "contributions": [
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.record",
+        "title": "Record audio",
+        "kind": "editor.attachment",
+        "extensionPoint": "digital.modula.vault-notes.editor.attachment",
+        "functionId": "digital.modula.vault-notes.voice.function.record",
+        "requiredCapability": "media.audio.capture",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.play",
+        "title": "Play recording",
+        "kind": "menu.item",
+        "extensionPoint": "digital.modula.vault-notes.note.actions",
+        "functionId": "digital.modula.vault-notes.voice.function.play",
+        "requiredCapability": "media.audio.playback",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.transcribe",
+        "title": "Transcribe",
+        "kind": "background.action",
+        "extensionPoint": "digital.modula.vault-notes.note.after-save",
+        "functionId": "digital.modula.vault-notes.voice.function.transcribe",
+        "requiredCapability": "transcription.request",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": true,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.insert-transcript",
+        "title": "Insert transcript",
+        "kind": "editor.command",
+        "extensionPoint": "digital.modula.vault-notes.editor.command",
+        "functionId": "digital.modula.vault-notes.voice.function.insert-transcript",
+        "requiredCapability": "notes.update",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      },
+      {
+        "id": "digital.modula.vault-notes.voice.contribution.composer-record",
+        "title": "Record Voice Note",
+        "kind": "composer.tool",
+        "extensionPoint": "digital.modula.vault-notes.composer.tool",
+        "functionId": "digital.modula.vault-notes.voice.function.record",
+        "requiredCapability": "media.audio.capture",
+        "availability": {
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "requiresOnline": false,
+          "requiredCapabilities": []
+        },
+        "priority": 100
+      }
+    ],
+    "retention": {
+      "defaultMode": "KEEP_DATA",
+      "supportsUserChoice": true,
+      "metadataNamespace": "digital.modula.vault-notes.voice"
+    },
+    "graphPolicy": {
+      "maxDepth": 8,
+      "maxNodes": 128
+    }
+  },
+  "backend": {
+    "mode": "module-managed",
+    "protocolVersion": "1.0.0",
+    "endpoints": {
+      "baseUrlStrategy": "registry",
+      "apiVersion": "1.0.0",
+      "discoveryPath": "/.well-known/modula-module.json",
+      "healthPath": "/v1/health",
+      "capabilitiesPath": "/v1/capabilities",
+      "actionsPath": "/v1/actions",
+      "allowedHosts": [
+        "vault-voice.modula.digital"
+      ]
+    },
+    "authentication": {
+      "strategy": "greenfield-signed-jwt",
+      "tokenExchangeRequired": true,
+      "audience": "modula-vault-voice",
+      "tokenTtlSeconds": 120,
+      "sessionExchangePath": "/v1/session/exchange"
+    },
+    "trust": {
+      "publisherId": "modula",
+      "allowedOrigins": [
+        "https://vault-voice.modula.digital"
+      ]
+    },
+    "data": {
+      "primaryStore": "module-backend",
+      "categories": [
+        {
+          "id": "vault-voice-recordings",
+          "description": "Extension-owned recording metadata, transcription jobs, and transcripts.",
+          "location": "module-backend",
+          "classification": "restricted",
+          "exportable": true,
+          "deletable": true
+        }
+      ],
+      "exportSupported": true,
+      "deletionSupported": true,
+      "backupResponsibility": "publisher"
+    },
+    "deployment": {
+      "ownership": "modula-hosted",
+      "multiTenant": true,
+      "selfHostingSupported": false
+    },
+    "actions": [
+      {
+        "actionId": "digital.modula.vault-notes.voice.function.transcribe",
+        "title": "transcribe",
+        "method": "POST",
+        "path": "/v1/actions/transcribe",
+        "inputSchema": "schemas/transcription-request.schema.json",
+        "outputSchema": "schemas/transcription-result.schema.json",
+        "permissions": [
+          "notes.attachments.read",
+          "transcription.request"
+        ],
+        "idempotent": true,
+        "timeoutMs": 30000,
+        "sideEffects": "internal-write",
+        "confirmation": "user"
+      }
+    ]
+  }
+}
