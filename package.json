@@ -1,10 +1,10 @@
 {
   "name": "@modula/vault-voice",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Governed offline-capable audio and transcription add-on for Vault Notes",
   "type": "module",
   "license": "UNLICENSED",
-  "files": ["dist", "modula.module.json", "module.manifest.json", "README.md", "SECURITY.md", "LICENSE"],
+  "files": ["dist", "modula.product.json", "modula.module.json", "module.manifest.json", "assets", "AGENTS.md", "PRODUCT.md", "PRIVACY.md", "README.md", "SECURITY.md", "LICENSE"],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

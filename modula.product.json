@@ -1,0 +1,265 @@
+{
+  "$schema": "https://modula.digital/schemas/product-standard/1.0-rc/product.schema.json",
+  "schema": "modula.product.1.0",
+  "productStandard": "1.0-RC",
+  "identity": {
+    "id": "digital.modula.vault-notes.voice",
+    "kind": "addon",
+    "version": "0.2.0",
+    "displayName": "Vault Voice",
+    "description": "Microphone recording and governed transcription add-on for Vault Notes. Transcription uses a provider-neutral voice.transcribe engine and is honest when unconfigured.",
+    "status": "beta",
+    "visibility": "beta"
+  },
+  "publisher": {
+    "id": "modula",
+    "displayName": "Modula",
+    "website": "https://modula.digital",
+    "supportUrl": "https://modula.digital/support"
+  },
+  "source": {
+    "repository": "modula-mod/modula-vault-voice",
+    "commit": "653e5d613578316182a74104b6bbc9f1b0f48719",
+    "manifestPath": "modula.product.json",
+    "provider": "github"
+  },
+  "licence": {
+    "spdx": "UNLICENSED",
+    "evidence": [
+      "LICENSE"
+    ],
+    "declaredByPublisher": true
+  },
+  "release": {
+    "channel": "beta",
+    "notes": "MPS 1.0 canonical add-on packaging. Transcription providers remain NOT_CONFIGURED. Icon is a development placeholder.",
+    "builder": "modula-product-release",
+    "provenance": {
+      "manifestSha256": "fd4502493dc76708be84aaf4647b06deef4f12cbc46b34aa6527889a983e43ae"
+    }
+  },
+  "security": {
+    "baseline": "mps-1.0",
+    "rawUserBearerForwarding": "forbidden",
+    "crossProductDatabaseAccess": "forbidden",
+    "arbitraryRemoteCode": "forbidden-by-default"
+  },
+  "presentation": {
+    "icon": {
+      "role": "product.icon",
+      "path": "assets/icon/icon.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "6a6b91cb6175af6bd45df62965057700d543279bc5c601b6a21c5c94e9c771fd",
+      "developmentAsset": true,
+      "alt": "Vault Voice development placeholder icon"
+    }
+  },
+  "compatibility": {
+    "productStandard": "^1.0.0-rc",
+    "greenfieldProtocol": "greenfield.v1",
+    "host": ">=1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "nativeCapabilities": [
+      "microphone"
+    ]
+  },
+  "telemetry": {
+    "destinationClass": "none",
+    "optOut": "not-applicable",
+    "purpose": "none"
+  },
+  "network": {
+    "class": "service-fabric-only"
+  },
+  "family": {
+    "id": "digital.modula.vault",
+    "role": "member"
+  },
+  "relationships": [
+    {
+      "type": "belongsToFamily",
+      "productId": "digital.modula.vault"
+    },
+    {
+      "type": "targets",
+      "productId": "digital.modula.vault-notes",
+      "versionRange": "^1.2.0"
+    },
+    {
+      "type": "extends",
+      "productId": "digital.modula.vault-notes",
+      "versionRange": "^1.2.0"
+    }
+  ],
+  "frontend": {
+    "mode": "host-contribution"
+  },
+  "backend": {
+    "mode": "engine-backed",
+    "engineRequirements": [
+      {
+        "capability": "voice.transcribe"
+      }
+    ]
+  },
+  "storage": {
+    "mode": "object-storage"
+  },
+  "data": {
+    "resources": [
+      {
+        "id": "recordings",
+        "type": "object-storage",
+        "owner": "PRODUCT_OWNED_DATA",
+        "schemaVersion": "1.0.0",
+        "retention": "until user deletes the recording or uninstall deleteData",
+        "backupOwner": "product",
+        "backupMethodClass": "publisher",
+        "exportSupported": true,
+        "deleteOwner": "product",
+        "sensitivity": "sensitive",
+        "encryption": "platform-default"
+      }
+    ],
+    "uninstall": {
+      "keepData": true,
+      "deleteData": true,
+      "accountDeletion": "delete"
+    },
+    "export": {
+      "supported": true,
+      "format": "application/json",
+      "owner": "product"
+    }
+  },
+  "permissions": [
+    {
+      "id": "microphone.capture",
+      "reason": "Record audio only when you tap Record, so you can attach a voice note.",
+      "category": "microphone",
+      "required": true,
+      "risk": "high"
+    },
+    {
+      "id": "notes.attachments.create",
+      "reason": "Attach a recording you created to the selected note.",
+      "category": "media",
+      "required": true,
+      "risk": "medium"
+    },
+    {
+      "id": "notes.attachments.read",
+      "reason": "Play or transcribe only the recording you select.",
+      "category": "media",
+      "required": true,
+      "risk": "low"
+    },
+    {
+      "id": "notes.update",
+      "reason": "Insert a transcript you approve into the selected note.",
+      "category": "records",
+      "required": true,
+      "risk": "medium"
+    }
+  ],
+  "capabilities": {
+    "requires": [
+      "notes.attachments.create",
+      "voice.transcribe"
+    ],
+    "provides": [],
+    "requests": [
+      "voice.transcribe"
+    ]
+  },
+  "dependencies": [
+    {
+      "type": "product",
+      "id": "digital.modula.vault-notes",
+      "versionRange": "^1.2.0"
+    },
+    {
+      "type": "capability",
+      "id": "voice.transcribe"
+    }
+  ],
+  "secrets": [
+    {
+      "id": "engine.voice.transcribe",
+      "scope": "engine",
+      "purpose": "Greenfield-brokered transcription engine credential. Never a secret value."
+    }
+  ],
+  "contributions": [
+    {
+      "id": "digital.modula.vault-notes.voice.contribution.record",
+      "target": "digital.modula.vault-notes/editor.attachment@1",
+      "label": "Record audio",
+      "priority": 100
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.contribution.play",
+      "target": "digital.modula.vault-notes/note.actions@1",
+      "label": "Play recording",
+      "priority": 100
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.contribution.transcribe",
+      "target": "digital.modula.vault-notes/note.after-save@1",
+      "label": "Transcribe",
+      "priority": 100,
+      "capabilities": [
+        "voice.transcribe"
+      ]
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.contribution.insert-transcript",
+      "target": "digital.modula.vault-notes/editor.command@1",
+      "label": "Insert transcript",
+      "priority": 100
+    },
+    {
+      "id": "digital.modula.vault-notes.voice.contribution.composer-record",
+      "target": "digital.modula.vault-notes/composer.tool@1",
+      "label": "Record Voice Note",
+      "priority": 100
+    }
+  ],
+  "privacy": {
+    "dataAccessed": [
+      "microphone audio while recording",
+      "user-selected recordings"
+    ],
+    "dataCreated": [
+      "audio recordings",
+      "optional transcripts"
+    ],
+    "dataTransmitted": [
+      "voice.transcribe engine when a provider is configured"
+    ],
+    "externalProcessors": [
+      "engine-resolved-by-greenfield"
+    ],
+    "retention": "recordings until user delete or uninstall deleteData; temporary buffers are not retained after capture completes",
+    "export": "supported for add-on-owned recordings/transcripts",
+    "deletion": "supported",
+    "analytics": "none",
+    "telemetry": "none"
+  },
+  "support": {
+    "documentation": "https://modula.digital/docs",
+    "support": "https://modula.digital/support",
+    "privacy": "https://modula.digital/privacy",
+    "securityContact": "https://modula.digital/security",
+    "publisherContact": "https://modula.digital/support"
+  },
+  "offers": [
+    {
+      "model": "free"
+    }
+  ]
+}
