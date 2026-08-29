@@ -5,7 +5,7 @@ import {mkdirSync, readFileSync, writeFileSync} from 'node:fs'
 import {join} from 'node:path'
 
 const root = process.cwd()
-const version = '0.1.0'
+const version = '0.2.0'
 const releaseDir = join(root, 'release')
 mkdirSync(releaseDir, {recursive: true})
 execFileSync('pnpm', ['build'], {cwd: root, stdio: 'inherit'})
