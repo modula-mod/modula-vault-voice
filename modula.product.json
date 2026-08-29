@@ -19,7 +19,7 @@
   },
   "source": {
     "repository": "modula-mod/modula-vault-voice",
-    "commit": "653e5d613578316182a74104b6bbc9f1b0f48719",
+    "commit": "23b8ef4e82eb2e2bf9de1c075af2ec81aeccc635",
     "manifestPath": "modula.product.json",
     "provider": "github"
   },

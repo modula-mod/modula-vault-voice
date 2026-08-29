@@ -60,7 +60,7 @@
   "source": {
     "provider": "github",
     "repository": "modula-mod/modula-vault-voice",
-    "commit": "576d0e332a6f38be9387980d93ed339a66c700eb",
+    "commit": "23b8ef4e82eb2e2bf9de1c075af2ec81aeccc635",
     "manifestPath": "module.manifest.json",
     "releaseTag": "vault-voice-v0.3.0",
     "releaseAssetName": "modula-vault-voice-0.3.0.tgz"
@@ -271,7 +271,7 @@
     ]
   },
   "integrity": {
-    "manifestSha256": "208f3ed6b258b08f1e21d47484ed8d875a478a2bf0433506523718264a9de8a6",
+    "manifestSha256": "ac54fe809cb2f393b3bbb7c20149062d050e7e22afac25f0f7ea47454763d4e8",
     "releaseSha256": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "extensionProduct": {
