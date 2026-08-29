@@ -515,7 +515,7 @@
   },
   "release": {
     "repository": "modula-mod/modula-vault-voice",
-    "commitSha": "73138c35f01a1fe404e64ec02cef66c39a19c014",
+    "commitSha": "dcf4fb427f04e01c17864a2772af5f7fbf6d9547",
     "checksum": "0000000000000000000000000000000000000000000000000000000000000000",
     "licenseEvidence": [
       "LICENSE",
