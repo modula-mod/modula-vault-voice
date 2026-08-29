@@ -1,5 +1,5 @@
 export const VAULT_VOICE_PRODUCT_ID = 'digital.modula.vault-notes.voice' as const
-export const VAULT_VOICE_VERSION = '0.1.0' as const
+export const VAULT_VOICE_VERSION = '0.2.0' as const
 export const VAULT_VOICE_TARGET_PRODUCT_ID = 'digital.modula.vault-notes' as const
 
 export type RecordingState = 'IDLE' | 'RECORDING' | 'SAVED' | 'FAILED'
