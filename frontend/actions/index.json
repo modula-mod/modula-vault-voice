@@ -1,0 +1,7 @@
+[
+  {"id": "digital.modula.vault-notes.voice.function.record", "family": "capability.invoke", "label": "Record audio", "commandId": "audio.capture", "capability": "audio.capture@1"},
+  {"id": "digital.modula.vault-notes.voice.function.play", "family": "capability.invoke", "label": "Play recording", "commandId": "audio.playback", "capability": "audio.playback@1"},
+  {"id": "digital.modula.vault-notes.voice.function.transcribe", "family": "function.invoke", "label": "Transcribe", "functionId": "digital.modula.vault-notes.voice.function.transcribe"},
+  {"id": "digital.modula.vault-notes.voice.function.insert-transcript", "family": "function.invoke", "label": "Insert transcript", "functionId": "digital.modula.vault-notes.voice.function.insert-transcript"},
+  {"id": "saveVoiceSettings", "family": "settings.update", "label": "Save Voice preferences", "settingsKey": "vaultVoice.preferences"}
+]

@@ -3,7 +3,7 @@
   "moduleId": "digital.modula.vault-notes.voice",
   "name": "Vault Voice",
   "description": "Offline-capable audio and transcription add-on for Vault Notes.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "standardVersion": "2.1.0",
   "sectionVersions": {
     "identity": "2.1.0",
@@ -60,10 +60,10 @@
   "source": {
     "provider": "github",
     "repository": "modula-mod/modula-vault-voice",
-    "commit": "dcf4fb427f04e01c17864a2772af5f7fbf6d9547",
+    "commit": "576d0e332a6f38be9387980d93ed339a66c700eb",
     "manifestPath": "module.manifest.json",
-    "releaseTag": "vault-voice-v0.2.0",
-    "releaseAssetName": "modula-vault-voice-0.2.0.tgz"
+    "releaseTag": "vault-voice-v0.3.0",
+    "releaseAssetName": "modula-vault-voice-0.3.0.tgz"
   },
   "license": {
     "status": "firstParty",
@@ -271,11 +271,11 @@
     ]
   },
   "integrity": {
-    "manifestSha256": "f642203a2b1ab956a6329eeaebd0332f96fdd81bd4a113cb34c127ccd699b1b8",
+    "manifestSha256": "208f3ed6b258b08f1e21d47484ed8d875a478a2bf0433506523718264a9de8a6",
     "releaseSha256": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "extensionProduct": {
-    "version": "0.2.0",
+    "version": "0.3.0",
     "kind": "addon",
     "targets": [
       {
