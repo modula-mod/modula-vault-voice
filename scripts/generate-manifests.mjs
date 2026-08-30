@@ -5,7 +5,7 @@ import {createDefaultModuleSectionVersions, manifestChecksum} from '@modula/modu
 
 const id = 'digital.modula.vault-notes.voice'
 const targetId = 'digital.modula.vault-notes'
-const version = '0.2.0'
+const version = '0.3.0'
 const sourceCommit = process.argv[2] ?? '0000000000000000000000000000000000000000'
 const standard = replaceProduct(vaultNotesStandard21ManifestFixture, 'digital.modula.vault-notes', id)
 

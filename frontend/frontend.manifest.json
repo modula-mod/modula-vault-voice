@@ -1,0 +1,243 @@
+{
+  "$schema": "https://modula.digital/schemas/product-standard/1.0-rc/frontend.schema.json",
+  "accessibility": {
+    "declaration": "host-baseline-with-product-semantics",
+    "keyboardNavigation": true,
+    "reduceMotion": true,
+    "scalableText": true,
+    "screenReader": true
+  },
+  "actions": [
+    {
+      "capability": "audio.capture@1",
+      "commandId": "audio.capture",
+      "family": "capability.invoke",
+      "id": "digital.modula.vault-notes.voice.function.record",
+      "label": "Record audio"
+    },
+    {
+      "capability": "audio.playback@1",
+      "commandId": "audio.playback",
+      "family": "capability.invoke",
+      "id": "digital.modula.vault-notes.voice.function.play",
+      "label": "Play recording"
+    },
+    {
+      "family": "function.invoke",
+      "functionId": "digital.modula.vault-notes.voice.function.transcribe",
+      "id": "digital.modula.vault-notes.voice.function.transcribe",
+      "label": "Transcribe"
+    },
+    {
+      "family": "function.invoke",
+      "functionId": "digital.modula.vault-notes.voice.function.insert-transcript",
+      "id": "digital.modula.vault-notes.voice.function.insert-transcript",
+      "label": "Insert transcript"
+    },
+    {
+      "family": "settings.update",
+      "id": "saveVoiceSettings",
+      "label": "Save Voice preferences",
+      "settingsKey": "vaultVoice.preferences"
+    }
+  ],
+  "capabilities": {
+    "optional": [
+      "audio.capture@1",
+      "audio.playback@1"
+    ]
+  },
+  "contributions": [
+    {
+      "action": "digital.modula.vault-notes.voice.function.record",
+      "component": {
+        "action": "digital.modula.vault-notes.voice.function.record",
+        "text": "Record audio",
+        "type": "button"
+      },
+      "id": "digital.modula.vault-notes.voice.contribution.record",
+      "requiredCapabilities": [
+        "audio.capture@1"
+      ],
+      "requiredPermissions": [
+        "microphone.capture",
+        "notes.attachments.create"
+      ],
+      "target": "digital.modula.vault-notes/editor.attachment@1"
+    },
+    {
+      "action": "digital.modula.vault-notes.voice.function.play",
+      "component": {
+        "action": "digital.modula.vault-notes.voice.function.play",
+        "text": "Play recording",
+        "type": "button"
+      },
+      "id": "digital.modula.vault-notes.voice.contribution.play",
+      "requiredCapabilities": [
+        "audio.playback@1"
+      ],
+      "requiredPermissions": [
+        "notes.attachments.read"
+      ],
+      "target": "digital.modula.vault-notes/note.actions@1"
+    },
+    {
+      "action": "digital.modula.vault-notes.voice.function.transcribe",
+      "component": {
+        "action": "digital.modula.vault-notes.voice.function.transcribe",
+        "text": "Transcribe",
+        "type": "button"
+      },
+      "id": "digital.modula.vault-notes.voice.contribution.transcribe",
+      "requiredCapabilities": [
+        "voice.transcribe"
+      ],
+      "requiredPermissions": [
+        "notes.attachments.read"
+      ],
+      "target": "digital.modula.vault-notes/note.after-save@1"
+    },
+    {
+      "action": "digital.modula.vault-notes.voice.function.insert-transcript",
+      "component": {
+        "action": "digital.modula.vault-notes.voice.function.insert-transcript",
+        "text": "Insert transcript",
+        "type": "button"
+      },
+      "id": "digital.modula.vault-notes.voice.contribution.insert-transcript",
+      "requiredPermissions": [
+        "notes.update"
+      ],
+      "target": "digital.modula.vault-notes/editor.command@1"
+    },
+    {
+      "action": "digital.modula.vault-notes.voice.function.record",
+      "component": {
+        "action": "digital.modula.vault-notes.voice.function.record",
+        "text": "Record Voice Note",
+        "type": "button"
+      },
+      "id": "digital.modula.vault-notes.voice.contribution.composer-record",
+      "requiredCapabilities": [
+        "audio.capture@1"
+      ],
+      "requiredPermissions": [
+        "microphone.capture",
+        "notes.attachments.create"
+      ],
+      "target": "digital.modula.vault-notes/composer.tool@1"
+    }
+  ],
+  "frontendSchemaVersion": "1.0.0",
+  "hostRuntime": {
+    "versionRange": ">=1.0.0 <2.0.0"
+  },
+  "mode": "host-contribution",
+  "mpsVersion": "1.0-RC",
+  "platformRequirements": {
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ]
+  },
+  "productId": "digital.modula.vault-notes.voice",
+  "releaseVersion": "0.3.0",
+  "schema": "modula.frontend.1.0",
+  "settings": {
+    "viewId": "settings"
+  },
+  "views": [
+    {
+      "bindings": [
+        {
+          "id": "preferences",
+          "settingsKey": "vaultVoice.preferences",
+          "source": "settings"
+        },
+        {
+          "capability": "voice.transcribe",
+          "id": "transcriptionProvider",
+          "source": "capability"
+        },
+        {
+          "capability": "audio.capture@1",
+          "id": "audioCapture",
+          "source": "capability"
+        }
+      ],
+      "id": "settings",
+      "kind": "settings",
+      "root": {
+        "accessibility": {
+          "label": "Vault Voice settings",
+          "role": "form"
+        },
+        "children": [
+          {
+            "text": "Microphone access is requested only after you choose Record. The host controls the native permission prompt and audio capture.",
+            "type": "text"
+          },
+          {
+            "binding": "audioCapture",
+            "text": "Microphone capability",
+            "type": "metadata"
+          },
+          {
+            "binding": "transcriptionProvider",
+            "text": "Transcription provider status",
+            "type": "metadata"
+          },
+          {
+            "binding": "preferences",
+            "field": {
+              "id": "autoOfferTranscription",
+              "label": "Offer transcription after recording",
+              "type": "boolean"
+            },
+            "type": "field"
+          },
+          {
+            "binding": "preferences",
+            "field": {
+              "id": "keepOriginalAudio",
+              "label": "Keep original audio after transcription",
+              "type": "boolean"
+            },
+            "type": "field"
+          },
+          {
+            "action": "saveVoiceSettings",
+            "text": "Save Voice preferences",
+            "type": "button"
+          }
+        ],
+        "type": "section"
+      },
+      "states": {
+        "capabilityUnavailable": {
+          "accessibility": {
+            "role": "status"
+          },
+          "text": "No transcription provider is configured. Recordings remain available, and Vault Voice will not fabricate a transcript.",
+          "type": "errorState"
+        },
+        "error": {
+          "accessibility": {
+            "role": "status"
+          },
+          "text": "Vault Voice settings are unavailable",
+          "type": "errorState"
+        },
+        "permissionDenied": {
+          "accessibility": {
+            "role": "status"
+          },
+          "text": "Microphone permission is required only to record new audio. Existing recordings remain available.",
+          "type": "errorState"
+        }
+      },
+      "title": "Vault Voice settings"
+    }
+  ]
+}
