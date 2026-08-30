@@ -16,6 +16,7 @@ jobs:
           repository: modula-mod/modula-product-standard
           ref: 0181de563e6f5312ba5cd75fdb4a019611781b9e
           path: modula-product-standard
+          ssh-key: ${{ secrets.MPS_READONLY_DEPLOY_KEY }}
       - uses: pnpm/action-setup@v4
         with: {version: 11.11.0}
       - uses: actions/setup-node@v4
