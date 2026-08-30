@@ -18,6 +18,9 @@ importers:
       '@modula/module-fixtures':
         specifier: file:../modula-module-standard/packages/module-fixtures
         version: file:../modula-module-standard/packages/module-fixtures
+      '@modula/product-ui':
+        specifier: file:../modula-product-standard/packages/product-ui
+        version: file:../modula-product-standard/packages/product-ui
       '@types/node':
         specifier: ^24.0.10
         version: 24.13.3
@@ -197,6 +200,9 @@ packages:
 
   '@modula/module-validator@file:../modula-module-standard/packages/module-validator':
     resolution: {directory: ../modula-module-standard/packages/module-validator, type: directory}
+
+  '@modula/product-ui@file:../modula-product-standard/packages/product-ui':
+    resolution: {directory: ../modula-product-standard/packages/product-ui, type: directory}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -697,6 +703,8 @@ snapshots:
   '@modula/module-validator@file:../modula-module-standard/packages/module-validator':
     dependencies:
       '@modula/module-standard': file:../modula-module-standard/packages/module-standard
+
+  '@modula/product-ui@file:../modula-product-standard/packages/product-ui': {}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true

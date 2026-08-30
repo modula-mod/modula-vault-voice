@@ -5,7 +5,7 @@
   "identity": {
     "id": "digital.modula.vault-notes.voice",
     "kind": "addon",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "displayName": "Vault Voice",
     "description": "Microphone recording and governed transcription add-on for Vault Notes. Transcription uses a provider-neutral voice.transcribe engine and is honest when unconfigured.",
     "status": "beta",
@@ -32,11 +32,11 @@
   },
   "release": {
     "channel": "beta",
-    "notes": "Product-owned recording, playback, transcription contributions, settings, permission explanation, and honest provider-unavailable presentation for the generic Modula Product Host. Transcription providers remain NOT_CONFIGURED. Icon is a development placeholder.",
+    "notes": "Vault Voice contributions, settings, permission explanation, and honest provider-unavailable UI are authored as typed TSX and statically compiled to a non-executable artifact. Transcription providers remain NOT_CONFIGURED. Icon is a development placeholder.",
     "builder": "modula-product-release",
     "provenance": {
       "manifestSha256": "fd4502493dc76708be84aaf4647b06deef4f12cbc46b34aa6527889a983e43ae",
-      "frontendSha256": "ad757e7fed93290c9bc197881b68eaebbf0085ee9fde968525e1f0e166f1c8c9"
+      "frontendSha256": "e0d11fa62ec1049c0ce2181eb74326841ba4111fd35b2b2a4daad47aa81bbb5a"
     }
   },
   "security": {
@@ -101,7 +101,7 @@
     "artifact": {
       "path": "frontend/frontend.manifest.json",
       "mediaType": "application/vnd.modula.frontend+json",
-      "sha256": "ad757e7fed93290c9bc197881b68eaebbf0085ee9fde968525e1f0e166f1c8c9",
+      "sha256": "e0d11fa62ec1049c0ce2181eb74326841ba4111fd35b2b2a4daad47aa81bbb5a",
       "schemaVersion": "1.0.0"
     }
   },
