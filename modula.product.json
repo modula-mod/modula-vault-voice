@@ -1,11 +1,11 @@
 {
-  "$schema": "https://modula.digital/schemas/product-standard/1.0-rc/product.schema.json",
+  "$schema": "https://modula.digital/schemas/product-standard/1.0/product.schema.json",
   "schema": "modula.product.1.0",
-  "productStandard": "1.0-RC",
+  "productStandard": "1.0",
   "identity": {
     "id": "digital.modula.vault-notes.voice",
     "kind": "addon",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "displayName": "Vault Voice",
     "description": "Microphone recording and governed transcription add-on for Vault Notes. Transcription uses a provider-neutral voice.transcribe engine and is honest when unconfigured.",
     "status": "beta",
@@ -19,7 +19,7 @@
   },
   "source": {
     "repository": "modula-mod/modula-vault-voice",
-    "commit": "23b8ef4e82eb2e2bf9de1c075af2ec81aeccc635",
+    "commit": "aea224d0e8ce2e54db454a5776c68f72821864d6",
     "manifestPath": "modula.product.json",
     "provider": "github"
   },
@@ -32,11 +32,11 @@
   },
   "release": {
     "channel": "beta",
-    "notes": "Product-owned recording, playback, transcription contributions, settings, permission explanation, and honest provider-unavailable presentation for the generic Modula Product Host. Transcription providers remain NOT_CONFIGURED. Icon is a development placeholder.",
+    "notes": "Vault Voice contributions, settings, permission explanation, and honest provider-unavailable UI are authored as typed TSX and statically compiled to a non-executable artifact. Transcription providers remain NOT_CONFIGURED. Icon is a development placeholder.",
     "builder": "modula-product-release",
     "provenance": {
-      "manifestSha256": "fd4502493dc76708be84aaf4647b06deef4f12cbc46b34aa6527889a983e43ae",
-      "frontendSha256": "ad757e7fed93290c9bc197881b68eaebbf0085ee9fde968525e1f0e166f1c8c9"
+      "manifestSha256": "edc73b31f146c65f34dde747d3ad5e87d32e9114898e18b1b4398c8dcd4e7601",
+      "frontendSha256": "5a6e72d0b4d460331262d8d307bad5bce8e11fb3a24d6b00ba13fce73d0b009f"
     }
   },
   "security": {
@@ -56,7 +56,7 @@
     }
   },
   "compatibility": {
-    "productStandard": "^1.0.0-rc",
+    "productStandard": "^1.0.0",
     "greenfieldProtocol": "greenfield.v1",
     "host": ">=1.0.0",
     "platforms": [
@@ -101,7 +101,7 @@
     "artifact": {
       "path": "frontend/frontend.manifest.json",
       "mediaType": "application/vnd.modula.frontend+json",
-      "sha256": "ad757e7fed93290c9bc197881b68eaebbf0085ee9fde968525e1f0e166f1c8c9",
+      "sha256": "5a6e72d0b4d460331262d8d307bad5bce8e11fb3a24d6b00ba13fce73d0b009f",
       "schemaVersion": "1.0.0"
     }
   },

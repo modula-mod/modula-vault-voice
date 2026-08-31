@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+
+- Moves Vault Voice contribution and settings authoring to typed TSX compiled into the safe MPS frontend artifact.
+- Keeps native capture capability-gated and ships no raw frontend code.
+
 ## 0.3.0
 
 - Own recording, playback, transcription, editor/composer contributions, settings, and permission explanation in a validated MPS frontend artifact.

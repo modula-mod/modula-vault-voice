@@ -11,4 +11,4 @@
 - Native capture is requested through the generic versioned audio capability; do not ship downloadable native implementation code.
 - Do not mutate `vault-voice-v0.2.0` or earlier immutable tags.
 
-Canonical: `modula.product.json`. MPS 1.0-RC.
+Canonical: `modula.product.json`. MPS 1.0.

@@ -1,6 +1,6 @@
 # Vault Voice
 
-Canonical MPS source: `modula.product.json` (1.0-RC). Published ID stays `digital.modula.vault-notes.voice`.
+Canonical MPS source: `modula.product.json` (1.0). Published ID stays `digital.modula.vault-notes.voice`.
 
 Vault Voice is the independently released `digital.modula.vault-notes.voice` add-on for Vault Notes. It contributes recording, playback, attachment, and transcription actions through Module Standard 2.1 extension points.
 

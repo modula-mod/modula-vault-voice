@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.1.0",
   "standardVersion": "2.1.0",
-  "moduleVersion": "0.3.0",
+  "moduleVersion": "0.4.0",
   "manifestSchemaVersion": "2.1.0",
   "dataSchemaVersion": "1.0.0",
   "id": "digital.modula.vault-notes.voice",
@@ -515,7 +515,7 @@
   },
   "release": {
     "repository": "modula-mod/modula-vault-voice",
-    "commitSha": "23b8ef4e82eb2e2bf9de1c075af2ec81aeccc635",
+    "commitSha": "aea224d0e8ce2e54db454a5776c68f72821864d6",
     "checksum": "0000000000000000000000000000000000000000000000000000000000000000",
     "licenseEvidence": [
       "LICENSE",
@@ -626,7 +626,7 @@
       {
         "id": "digital.modula.vault-notes.voice.capture",
         "title": "Vault Voice media capture",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "kind": "service"
       }
     ]
@@ -638,7 +638,7 @@
         "id": "digital.modula.vault-notes.voice.service",
         "title": "Vault Voice transcription service",
         "kind": "custom",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "contract": "digital.modula.vault-notes.voice.service.v1",
         "permissions": [
           "notes.attachments.read",
@@ -1167,7 +1167,7 @@
   },
   "versioning": {
     "version": "2.1.0",
-    "moduleVersion": "0.3.0",
+    "moduleVersion": "0.4.0",
     "standardVersion": "2.1.0",
     "manifestVersion": "2.1.0"
   },
@@ -1269,7 +1269,7 @@
     "items": []
   },
   "extensionProduct": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "kind": "addon",
     "targets": [
       {
