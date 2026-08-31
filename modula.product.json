@@ -1,7 +1,7 @@
 {
-  "$schema": "https://modula.digital/schemas/product-standard/1.0-rc/product.schema.json",
+  "$schema": "https://modula.digital/schemas/product-standard/1.0/product.schema.json",
   "schema": "modula.product.1.0",
-  "productStandard": "1.0-RC",
+  "productStandard": "1.0",
   "identity": {
     "id": "digital.modula.vault-notes.voice",
     "kind": "addon",
@@ -35,8 +35,8 @@
     "notes": "Vault Voice contributions, settings, permission explanation, and honest provider-unavailable UI are authored as typed TSX and statically compiled to a non-executable artifact. Transcription providers remain NOT_CONFIGURED. Icon is a development placeholder.",
     "builder": "modula-product-release",
     "provenance": {
-      "manifestSha256": "fd4502493dc76708be84aaf4647b06deef4f12cbc46b34aa6527889a983e43ae",
-      "frontendSha256": "e0d11fa62ec1049c0ce2181eb74326841ba4111fd35b2b2a4daad47aa81bbb5a"
+      "manifestSha256": "bdd57e7fbee0f38e40f36afb2781a5aa22f51789e79cba6a98d94f9ee48ce4e8",
+      "frontendSha256": "5a6e72d0b4d460331262d8d307bad5bce8e11fb3a24d6b00ba13fce73d0b009f"
     }
   },
   "security": {
@@ -56,7 +56,7 @@
     }
   },
   "compatibility": {
-    "productStandard": "^1.0.0-rc",
+    "productStandard": "^1.0.0",
     "greenfieldProtocol": "greenfield.v1",
     "host": ">=1.0.0",
     "platforms": [
@@ -101,7 +101,7 @@
     "artifact": {
       "path": "frontend/frontend.manifest.json",
       "mediaType": "application/vnd.modula.frontend+json",
-      "sha256": "e0d11fa62ec1049c0ce2181eb74326841ba4111fd35b2b2a4daad47aa81bbb5a",
+      "sha256": "5a6e72d0b4d460331262d8d307bad5bce8e11fb3a24d6b00ba13fce73d0b009f",
       "schemaVersion": "1.0.0"
     }
   },
